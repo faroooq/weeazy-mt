@@ -81,7 +81,7 @@ router.delete("/:id", checkAuth, authorize("project manager", "admin"), (req, re
     });
 });
 
-router.get("/:id/employees", checkAuth, authorize("project manager", "admin", "developer"), (req, res, next) => {
+router.get("/:id/employees", checkAuth, authorize("project manager", "admin", "developer", "all"), (req, res, next) => {
   const teamId = req.params.id;
   Employee.find({ team: teamId }, "_id firstName lastName email")
     .then((employees) => {

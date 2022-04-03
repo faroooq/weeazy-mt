@@ -1,0 +1,55 @@
+[{
+  "_id": {
+    "$oid": "62488870091ff2c23feb4642"
+  },
+  "changedBy": {
+    "$oid": "62484548429227acae43d866"
+  },
+  "attribute": "status",
+  "oldValue": "OPEN",
+  "newValue": "CLOSED",
+  "dateTime": {
+    "$date": "2022-04-02T17:31:28.696Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "624943d9e6a9bbefe0ccb4ea"
+  },
+  "changedBy": {
+    "$oid": "6249376685dea5e5bb184e3b"
+  },
+  "attribute": "assignedTo",
+  "oldValue": "Admin admin",
+  "newValue": "Tester tester",
+  "dateTime": {
+    "$date": "2022-04-03T06:51:05.635Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62494999778c52f21c4b88aa"
+  },
+  "changedBy": {
+    "$oid": "6249376685dea5e5bb184e3b"
+  },
+  "attribute": "newComment",
+  "newValue": "hello",
+  "dateTime": {
+    "$date": "2022-04-03T07:15:37.007Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "624949a4778c52f21c4b88b1"
+  },
+  "changedBy": {
+    "$oid": "6249376685dea5e5bb184e3b"
+  },
+  "attribute": "newComment",
+  "newValue": "i am good",
+  "dateTime": {
+    "$date": "2022-04-03T07:15:48.258Z"
+  },
+  "__v": 0
+}]

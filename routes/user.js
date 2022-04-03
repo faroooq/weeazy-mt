@@ -30,9 +30,9 @@ router.get("/", checkAuth, authorize("project manager", "admin"), (req, res, nex
     };
     limit = 0;
   }
-  if (unassigned === "true") {
-    query["team"] = null;
-  }
+  // if (unassigned === "true") {
+  //   query["team"] = null;
+  // }
   User.find(query, "_id firstName lastName email role")
     .limit(limit)
     .then((employees) => {

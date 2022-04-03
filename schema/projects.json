@@ -1,0 +1,18 @@
+[{
+  "_id": {
+    "$oid": "62466f8a63fbd40bde9c8582"
+  },
+  "title": "Java",
+  "description": "Hello",
+  "status": "Opened",
+  "teams": [
+    {
+      "$oid": "624850bbc38ff1b145528672"
+    }
+  ],
+  "employees": [
+    {
+      "$oid": "62484548429227acae43d866"
+    }
+  ]
+}]

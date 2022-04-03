@@ -1,0 +1,13 @@
+[{
+  "_id": {
+    "$oid": "624887ec091ff2c23feb461d"
+  },
+  "length": 1150609,
+  "chunkSize": 261120,
+  "uploadDate": {
+    "$date": "2022-04-02T17:29:16.456Z"
+  },
+  "filename": "recognition_1.png",
+  "md5": "21b8a9e7a5cf29ba4ed74a604670c2c8",
+  "contentType": "image/png"
+}]

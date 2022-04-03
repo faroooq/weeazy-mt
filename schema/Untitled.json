@@ -1,0 +1,95 @@
+[{
+  "_id": {
+    "$oid": "62484548429227acae43d866"
+  },
+  "role": "admin",
+  "email": "admin@gmail.com",
+  "firstName": "Admin",
+  "lastName": "admin",
+  "password": "$2b$10$C1CxfnTq1I79rvfWj8RZpOy3myVcvcAvKuI/ih0tK2nPmOQIvFUvy",
+  "team": [
+    {
+      "$oid": "624850bbc38ff1b145528672"
+    }
+  ],
+  "project": [
+    {
+      "$oid": "62466f8a63fbd40bde9c8582"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "624889ae3fe4f0c2e67b4f16"
+  },
+  "role": "project manager",
+  "email": "manager@gmail.com",
+  "firstName": "Manager",
+  "lastName": "manager",
+  "password": "$2b$10$husAhAtc84NvrprzYo.p..xJhuI7xcAoY0lFoyN75g01KpA9E9rLe",
+  "team": {
+    "$oid": "624850bbc38ff1b145528672"
+  },
+  "project": [
+    {
+      "$oid": "62466f8a63fbd40bde9c8582"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "624932b685dea5e5bb184dac"
+  },
+  "role": "all",
+  "email": "all@gmail.com",
+  "firstName": "All",
+  "lastName": "all",
+  "password": "$2b$10$dEQ98fK7n7mJQPdLtGp5GeSi6xo1W85yNNbLBo8Bs0nxHIULkOi.C",
+  "team": {
+    "$oid": "624850bbc38ff1b145528672"
+  },
+  "project": [
+    {
+      "$oid": "62466f8a63fbd40bde9c8582"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6249376685dea5e5bb184e3b"
+  },
+  "role": "developer",
+  "email": "developer@gmail.com",
+  "firstName": "Developer",
+  "lastName": "developer",
+  "password": "$2b$10$tNgfQ1SwoP81dTKW6AstUOAnpC2aQ6plw0BHtHg86K6mKMa.VOLNa",
+  "team": {
+    "$oid": "624850bbc38ff1b145528672"
+  },
+  "project": [
+    {
+      "$oid": "62466f8a63fbd40bde9c8582"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6249390685dea5e5bb184e6c"
+  },
+  "role": "tester",
+  "email": "tester@gmail.com",
+  "firstName": "Tester",
+  "lastName": "tester",
+  "password": "$2b$10$384mMpg8/BP2j6MGMOIrnunA1373TzQbQNMjSnlimN/G7.rBT3YY.",
+  "team": [
+    {
+      "$oid": "624850bbc38ff1b145528672"
+    }
+  ],
+  "project": [
+    {
+      "$oid": "62466f8a63fbd40bde9c8582"
+    }
+  ],
+  "__v": 0
+}]
