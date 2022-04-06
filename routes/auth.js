@@ -11,6 +11,7 @@ router.post("/signup", (req, res, next) => {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       password: hash,
+      role: req.body.role
     });
     user
       .save()
@@ -45,6 +46,7 @@ router.post("/login", (req, res, next) => {
           firstName: fetchedUser.firstName,
           userId: fetchedUser._id,
           role: fetchedUser.role,
+          // TODO: Need to check why this condition is ?
           projectId: fetchedUser.team.project._id,
         },
         "Super secret message only for development: Seals are like dogs but underwater dogs.",
