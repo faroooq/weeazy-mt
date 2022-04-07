@@ -46,8 +46,7 @@ router.post("/login", (req, res, next) => {
           firstName: fetchedUser.firstName,
           userId: fetchedUser._id,
           role: fetchedUser.role,
-          // TODO: Need to check why this condition is ?
-          projectId: fetchedUser.team.project._id,
+          projectId: fetchedUser.team?.project?._id,
         },
         "Super secret message only for development: Seals are like dogs but underwater dogs.",
         { expiresIn: "1h" }
