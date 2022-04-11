@@ -151,6 +151,7 @@ router.post("/", upload.array("files"), checkAuth, authorize("all"), (req, res) 
     team: req.body.team,
     assignedTo: req.body.assignedTo,
     type: req.body.type,
+    tags: req.body.tags,
     priority: req.body.priority,
   });
 

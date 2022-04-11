@@ -13,6 +13,7 @@ const ticketSchema = mongoose.Schema({
   status: { type: String, default: "OPEN" },
   priority: { type: String, default: "" },
   type: { type: String, default: "BUG" },
+  tags: [{ type: String }],
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment", required: false }],
   history: [{ type: mongoose.Schema.Types.ObjectId, ref: "TicketHistory", required: false }],
 });
