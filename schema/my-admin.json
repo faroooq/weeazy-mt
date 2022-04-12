@@ -1,0 +1,60 @@
+{
+    "_id": {
+        "$oid": "62466f8a63fbd40bde9c8582"
+    },
+    "title": "Super Admin",
+    "description": "Super Admin",
+    "status": "Active",
+    "teams": [
+        {
+            "$oid": "624850bbc38ff1b145528672"
+        },
+        {
+            "$oid": "624de185d1e3b0f24aeb7523"
+        },
+        {
+            "$oid": "624e2c76ffd4ba01b7669aa1"
+        }
+    ],
+    "employees": [
+        {
+            "$oid": "624dc7dba449fce23e872ee0"
+        }
+    ]
+}
+
+{
+    "_id": {
+        "$oid": "624850bbc38ff1b145528672"
+    },
+    "employees": [
+        {
+            "$oid": "624dc7dba449fce23e872ee0"
+        }
+    ],
+    "name": "Super Admin Team",
+    "project": {
+        "$oid": "62466f8a63fbd40bde9c8582"
+    },
+    "__v": 0
+}
+
+{
+    "_id": {
+        "$oid": "624dc7dba449fce23e872ee0"
+    },
+    "role": "admin",
+    "email": "admin@gmail.com",
+    "firstName": "admin",
+    "lastName": "admin",
+    "password": "$2b$10$/SSTqp1eW/ZDlLN72iAJtu9y/fsn54bbp3idW5fEd70rM6f2cRm6m",
+    "team": {
+        "$oid": "624850bbc38ff1b145528672"
+    },
+    "project": [
+        {
+            "$oid": "62466f8a63fbd40bde9c8582"
+        }
+    ],
+    "__v": 0
+}

@@ -40,13 +40,17 @@ router.get("/", checkAuth, authorize("all"), (req, res, next) => {
   const project = req.query.projectId;
   const number = req.query.number;
   let query = project && number ? { project, number } : project ? { project } : number ? { number } : {};
-  Ticket.find(query).then((tickets) => {
-    if (tickets) {
-      res.status(200).json(tickets);
-    } else {
-      res.status(404).json({ message: "Tickets not found." });
-    }
-  });
+  Ticket.find(query)
+    .populate("raisedBy", "_id firstName lastName email")
+    .populate("team", "_id name")
+    .populate("assignedTo", "_id firstName lastName email")
+    .then((tickets) => {
+      if (tickets) {
+        res.status(200).json(tickets);
+      } else {
+        res.status(404).json({ message: "Tickets not found." });
+      }
+    });
 });
 
 //ticket by id
