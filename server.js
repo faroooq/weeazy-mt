@@ -18,7 +18,7 @@ const teamRoutes = require("./routes/team");
 const app = express();
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Origin", "https://www.weeazy.org");
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE");
   next();
@@ -34,8 +34,8 @@ mongoose
   });
 
 let corsOptions = {
-  origin: "*"
-  // origin: ['https://api.weeazy.org', process.env.WEEAZY_UI_REMOTE_URL]
+  // origin: "*"
+  origin: ['https://www.weeazy.org', process.env.WEEAZY_UI_REMOTE_URL]
 };
 app.use(cors(corsOptions));
 app.use(compression());

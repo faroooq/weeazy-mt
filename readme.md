@@ -8,8 +8,9 @@ ssh -i LightsailDefaultKey-ap-south-1.pem bitnami@3.111.232.98
 1. In server, goto: cd stackmi/stackmi-mt/
 2. Pull the changes from git
 3. git pull -> username: faroooq, password: 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
-4. Restart apache: sudo /opt/bitnami/ctlscript.sh restart apache
-5. Start server: forever start server.js
+4. sudo killall node
+5. Restart apache: sudo /opt/bitnami/ctlscript.sh restart apache
+6. Start server: forever start server.js
 # NOTE: No need to start server everytime. Only restart apache, for regular changes.
 # NOTE: MAKE SURE YOU ARE IN THE stackmi-midtier DIRECTORY
 
