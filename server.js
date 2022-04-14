@@ -23,7 +23,7 @@ app.use((req, res, next) => {
   next();
 });
 
-const dbURI = process.env.dbURI;
+const dbURI = process.env.dbURI || "mongodb://localhost:27017/bug_tracker";
 
 mongoose
   .connect(dbURI, { useUnifiedTopology: true, useCreateIndex: true, useNewUrlParser: true, useFindAndModify: false })
@@ -33,7 +33,7 @@ mongoose
   });
 
 let corsOptions = {
-  // origin: "*"
+  //origin: "*"
   origin: ['https://www.weeazy.org', process.env.WEEAZY_UI_REMOTE_URL]
 };
 app.use(cors(corsOptions));
