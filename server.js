@@ -34,8 +34,8 @@ mongoose
   });
 
 let corsOptions = {
-  // origin: "*"
-  origin: ['https://www.weeazy.org', process.env.WEEAZY_UI_REMOTE_URL]
+  origin: "*"
+  // origin: ['https://www.weeazy.org', process.env.WEEAZY_UI_REMOTE_URL]
 };
 app.use(cors(corsOptions));
 app.use(compression());
@@ -55,7 +55,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/teams", teamRoutes);
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => console.log(`Server started on port  ${PORT}`));
 
