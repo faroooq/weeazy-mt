@@ -1,9 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
+const cookieParser = require('cookie-parser');
 const Grid = require("gridfs-stream");
 const GridFsStorage = require("multer-gridfs-storage");
 const multer = require("multer");
+const compression = require('compression');
+const cors = require("cors");
 
 //Routes import
 const authRoutes = require("./routes/auth");
@@ -15,23 +17,35 @@ const teamRoutes = require("./routes/team");
 const app = express();
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Origin", "https://www.weeazy.org");
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PATCH,DELETE,OPTIONS");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE");
   next();
 });
 
-//connect to mongo
-const mongoURI = "mongodb://localhost:27017/bug_tracker";
+const dbURI = process.env.dbURI;
+
 mongoose
-  .connect(mongoURI, { useUnifiedTopology: true, useCreateIndex: true, useNewUrlParser: true, useFindAndModify: false })
+  .connect(dbURI, { useUnifiedTopology: true, useCreateIndex: true, useNewUrlParser: true, useFindAndModify: false })
   .then(() => console.log("Mongo connected"))
   .catch((err) => {
     console.log(`DB Connection Error: ${err.message}`);
   });
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+let corsOptions = {
+  // origin: "*"
+  origin: ['https://www.weeazy.org', process.env.WEEAZY_UI_REMOTE_URL]
+};
+app.use(cors(corsOptions));
+app.use(compression());
+
+// parse requests of content-type - application/json
+app.use(express.json());  /* bodyParser.json() is deprecated */
+
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));   /* bodyParser.urlencoded() is deprecated */
+
+app.use(cookieParser());
 
 //Routes
 app.use("/api/auth", authRoutes);
