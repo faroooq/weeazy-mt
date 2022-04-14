@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require('cookie-parser');
@@ -33,8 +34,8 @@ mongoose
   });
 
 let corsOptions = {
-  //origin: "*"
-  origin: ['https://www.weeazy.org', process.env.WEEAZY_UI_REMOTE_URL]
+  origin: "*"
+  // origin: ['https://api.weeazy.org', process.env.WEEAZY_UI_REMOTE_URL]
 };
 app.use(cors(corsOptions));
 app.use(compression());
