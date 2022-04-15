@@ -18,8 +18,8 @@ const teamRoutes = require("./routes/team");
 const app = express();
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://www.weeazy.org");
-  res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, Content-Type");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE");
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
@@ -34,11 +34,11 @@ mongoose
     console.log(`DB Connection Error: ${err.message}`);
   });
 
-let corsOptions = {
-  // origin: "*"
-  origin: ['https://www.weeazy.org', process.env.WEEAZY_UI_REMOTE_URL]
-};
-app.use(cors(corsOptions));
+// let corsOptions = {
+//   // origin: "*"
+//   origin: ['https://www.weeazy.org', process.env.WEEAZY_UI_REMOTE_URL]
+// };
+// app.use(cors(corsOptions));
 app.use(compression());
 
 // parse requests of content-type - application/json
