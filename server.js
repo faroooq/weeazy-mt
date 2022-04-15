@@ -77,7 +77,10 @@ app.use(function (req, res, next) {
   // fs.createReadStream(staticRoot + 'browser/index.html').pipe(res);
 });
 
-app.listen(app.get('port'), () => console.log(`Server started on port  ${PORT}`));
+// set port, listen for requests
+app.listen(app.get('port'), () => {
+  console.log(`Server is running on port.`, app.get('port'));
+});
 
 process.on("SIGINT", () => {
   console.log("Bye bye!");
