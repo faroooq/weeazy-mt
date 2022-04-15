@@ -7,8 +7,16 @@ const GridFsStorage = require("multer-gridfs-storage");
 const multer = require("multer");
 const compression = require('compression');
 const cors = require("cors");
+//Routes import
+const authRoutes = require("./routes/auth");
+const ticketRoutes = require("./routes/ticket");
+const userRoutes = require("./routes/user");
+const projectRoutes = require("./routes/project");
+const teamRoutes = require("./routes/team");
 
 const app = express();
+
+app.set('port', (process.env.PORT || 3000));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "https://www.weeazy.org");
@@ -23,13 +31,6 @@ let corsOptions = {
   origin: ['https://www.weeazy.org', process.env.WEEAZY_UI_REMOTE_URL]
 };
 app.use(cors(corsOptions));
-
-//Routes import
-const authRoutes = require("./routes/auth");
-const ticketRoutes = require("./routes/ticket");
-const userRoutes = require("./routes/user");
-const projectRoutes = require("./routes/project");
-const teamRoutes = require("./routes/team");
 
 const dbURI = process.env.dbURI || "mongodb://localhost:27017/bug_tracker";
 
@@ -57,9 +58,26 @@ app.use("/api/users", userRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/teams", teamRoutes);
 
-const PORT = process.env.PORT || 3000;
+// simple route
+app.get("/", (req, res) => {
+  res.json({ message: "Deployment in Progress.. Please try in 5 min." });
+});
 
-app.listen(PORT, () => console.log(`Server started on port  ${PORT}`));
+app.use(function (req, res, next) {
+  //if the request is not html then move along
+  var accept = req.accepts('html', 'json', 'xml');
+  if (accept !== 'html') {
+    return next();
+  }
+  // if the request has a '.' assume that it's for a file, move along
+  var ext = path.extname(req.path);
+  if (ext !== '') {
+    return next();
+  }
+  // fs.createReadStream(staticRoot + 'browser/index.html').pipe(res);
+});
+
+app.listen(app.get('port'), () => console.log(`Server started on port  ${PORT}`));
 
 process.on("SIGINT", () => {
   console.log("Bye bye!");
