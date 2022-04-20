@@ -47,7 +47,7 @@ router.get("/", checkAuth, authorize("admin"), (req, res, next) => {
   });
 });
 
-router.get("/:id/statistics", checkAuth, authorize("project manager"), (req, res, next) => {
+router.get("/:id/statistics", checkAuth, authorize("project manager", "developer"), (req, res, next) => {
   const id = req.params.id;
   Ticket.aggregate([
     {

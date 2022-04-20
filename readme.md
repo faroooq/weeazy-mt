@@ -125,11 +125,11 @@ Premium Developer
 
 MongoDB compass client connect:
 ----------------------------
-mongodb://root:8PkJ2BpQ1VUu@api.weeazy.org:27017/?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false
+mongodb://root:elpW6T6KT08i@api.weeazy.org:27017/?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false
 
 # Connect aws database directly to query:
 mongo admin --username root -p
-8PkJ2BpQ1VUu
+elpW6T6KT08i
 # For password
 cat bitnami_application_password
 
