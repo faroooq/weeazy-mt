@@ -47,7 +47,7 @@ router.get("/", checkAuth, authorize("admin"), (req, res, next) => {
   });
 });
 
-router.get("/:id/statistics", checkAuth, authorize("project manager", "developer"), (req, res, next) => {
+router.get("/:id/statistics", checkAuth, authorize("admin", "project manager", "developer"), (req, res, next) => {
   const id = req.params.id;
   Ticket.aggregate([
     {
@@ -186,6 +186,15 @@ router.post("/", checkAuth, authorize("admin"), (req, res, next) => {
       res.status(500).json({ message: "Something went wrong.", error });
       console.log(error);
     });
+});
+
+router.delete("/:id", checkAuth, authorize("admin"), (req, res, next) => {
+  const id = req.params.id;
+  let project;
+  Project.findByIdAndDelete(id)
+    .then((deletedProject) => {
+      res.status(200).json({ message: "Project removed successfully." });
+    })
 });
 
 module.exports = router;
