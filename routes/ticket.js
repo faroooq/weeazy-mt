@@ -152,6 +152,7 @@ router.post("/", upload.array("files"), checkAuth, authorize("all"), (req, res) 
   const ticket = new Ticket({
     title: req.body.title,
     description: req.body.description,
+    sbeditor: req.body.sbeditor,
     files,
     raisedBy: req.userData.userId,
     project: req.body.project,
@@ -178,12 +179,14 @@ router.patch("/:id", checkAuth, authorize("all"), (req, res, next) => {
   const id = req.params.id;
   const uderId = req.userData.userId;
   const changes = req.body.changes;
+  const sbeditor = req.body.sbeditor;
   const ticketHistory = [];
   const updateQuery = {};
   for (let change of changes) {
     updateQuery[change.attribute] = change.attribute === "assignedTo" || change.attribute === "team" ? change.id : change.newValue;
     ticketHistory.push(new TicketHistory({ changedBy: uderId, attribute: change.attribute, oldValue: change.oldValue, newValue: change.newValue }));
   }
+  updateQuery["sbeditor"] = sbeditor ? sbeditor : "";
   Ticket.findOneAndUpdate({ number: id }, updateQuery)
     .then((updatedTicket) => {
       if (updatedTicket) {
