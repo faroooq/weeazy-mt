@@ -7,7 +7,7 @@ const checkAuth = require("../middleware/check-auth");
 const authorize = require("../middleware/authorization");
 const bcrypt = require("bcrypt");
 
-router.get("/", checkAuth, authorize("project manager", "admin"), (req, res, next) => {
+router.get("/", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
   const searchQuery = req.query.searchQuery;
   const excludedIds = req.query.excludedIds;
   const unassigned = req.query.unassigned;
@@ -44,7 +44,7 @@ router.get("/", checkAuth, authorize("project manager", "admin"), (req, res, nex
     });
 });
 
-router.patch("/", checkAuth, authorize("project manager", "admin"), (req, res, next) => {
+router.patch("/", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
   const employees = [];
   const updateQuery = req.body.update;
   const oldTeamsToUpdate = {};

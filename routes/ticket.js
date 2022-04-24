@@ -52,7 +52,7 @@ router.get("/", checkAuth, authorize("all"), (req, res, next) => {
         }
       });
   } else {
-    res.status(404).json({ message: "You are not assigned to any project to view tickets." });
+    res.status(404).json({ message: "You are not assigned to any organization to view tickets." });
   }
 });
 

@@ -9,7 +9,7 @@ const async = require("async");
 const express = require("express");
 const router = express.Router();
 
-// router.get("/", checkAuth, authorize("project manager", "admin"), (req, res, next) => {
+// router.get("/", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
 router.get("/", (req, res, next) => {
   const projectId = req.query.projectId;
   let query = projectId ? { project: projectId } : {};
@@ -46,7 +46,7 @@ router.get("/", (req, res, next) => {
     });
 });
 
-router.post("/", checkAuth, authorize("project manager", "admin"), (req, res, next) => {
+router.post("/", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
   const team = new Team({ name: req.body.teamName, project: req.body.projectId });
   team
     .save()
@@ -61,7 +61,7 @@ router.post("/", checkAuth, authorize("project manager", "admin"), (req, res, ne
     });
 });
 
-router.delete("/:id", checkAuth, authorize("project manager", "admin"), (req, res, next) => {
+router.delete("/:id", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
   const id = req.params.id;
   let team;
   Team.findByIdAndDelete(id)
@@ -81,7 +81,7 @@ router.delete("/:id", checkAuth, authorize("project manager", "admin"), (req, re
     });
 });
 
-router.get("/:id/employees", checkAuth, authorize("project manager", "admin", "developer", "all"), (req, res, next) => {
+router.get("/:id/employees", checkAuth, authorize("admin", "suadmin", "member", "all"), (req, res, next) => {
   const teamId = req.params.id;
   Employee.find({ team: teamId }, "_id firstName lastName email")
     .then((employees) => {

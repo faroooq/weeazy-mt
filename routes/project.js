@@ -9,7 +9,7 @@ const Ticket = require("../models/ticket");
 const Employee = require("../models/user");
 const async = require("async");
 
-router.get("/:id", checkAuth, authorize("project manager", "admin"), (req, res, next) => {
+router.get("/:id", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
   const id = req.params.id;
   let project = {};
   Project.findById(id)
@@ -27,7 +27,7 @@ router.get("/:id", checkAuth, authorize("project manager", "admin"), (req, res, 
     });
 });
 
-router.get("/:id/employees", checkAuth, authorize("project manager", "admin"), (req, res, next) => {
+router.get("/:id/employees", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
   const id = req.params.id;
   Team.find({ project: id })
     .populate("employees", "-password")
@@ -37,7 +37,7 @@ router.get("/:id/employees", checkAuth, authorize("project manager", "admin"), (
     });
 });
 
-router.get("/", checkAuth, authorize("admin"), (req, res, next) => {
+router.get("/", checkAuth, authorize("suadmin"), (req, res, next) => {
   Project.find().then((projects) => {
     if (projects) {
       res.status(201).json(projects);
@@ -47,7 +47,7 @@ router.get("/", checkAuth, authorize("admin"), (req, res, next) => {
   });
 });
 
-router.get("/:id/statistics", checkAuth, authorize("admin", "project manager", "developer"), (req, res, next) => {
+router.get("/:id/statistics", checkAuth, authorize("suadmin", "admin", "member"), (req, res, next) => {
   const id = req.params.id;
   Ticket.aggregate([
     {
@@ -122,7 +122,8 @@ router.get("/:id/statistics", checkAuth, authorize("admin", "project manager", "
     .catch((err) => res.status(500).json(err));
 });
 
-router.post("/", checkAuth, authorize("admin"), (req, res, next) => {
+// New Project
+router.post("/", checkAuth, authorize("suadmin", "admin"), (req, res, next) => {
   const teams = [];
   for (let team of req.body.project.teams) {
     teams.push(new Team(team));
@@ -188,7 +189,7 @@ router.post("/", checkAuth, authorize("admin"), (req, res, next) => {
     });
 });
 
-router.delete("/:id", checkAuth, authorize("admin"), (req, res, next) => {
+router.delete("/:id", checkAuth, authorize("suadmin", "admin"), (req, res, next) => {
   const id = req.params.id;
   let project;
   Project.findByIdAndDelete(id)

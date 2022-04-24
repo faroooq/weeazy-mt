@@ -112,17 +112,6 @@ npm rebuild bcrypt --build-from-source
 
 npm i bcrypt
 
-# Roles:
-all - users
-admin - admin
-project manager - project manager
-developer - developer
-tester - tester
-
-# Team:
-Paid Developer
-Premium Developer
-
 MongoDB compass client connect:
 ----------------------------
 mongodb://root:elpW6T6KT08i@api.weeazy.org:27017/?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false
