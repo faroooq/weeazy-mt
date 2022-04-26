@@ -130,6 +130,7 @@ router.post("/", checkAuth, authorize("suadmin", "admin"), (req, res, next) => {
   }
   const project = new Project({
     title: req.body.project.title,
+    code: req.body.project.code,
     description: req.body.project.description,
     teams,
   });

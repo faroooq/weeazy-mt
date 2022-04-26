@@ -11,6 +11,7 @@ router.get("/", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
   const searchQuery = req.query.searchQuery;
   const excludedIds = req.query.excludedIds;
   const unassigned = req.query.unassigned;
+  const projectCode = req.query.projectCode;
   let query = {};
   let limit = 100;
   if (searchQuery) {
@@ -33,7 +34,8 @@ router.get("/", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
   if (unassigned === "true") {
     query["team"] = null;
   }
-  User.find(query, "_id firstName lastName email role")
+  query["code"] = projectCode;
+  User.find(query, "_id firstName lastName email role code")
     .limit(limit)
     .then((employees) => {
       if (employees) {

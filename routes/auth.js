@@ -11,7 +11,8 @@ router.post("/signup", (req, res, next) => {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       password: hash,
-      role: req.body.role
+      role: req.body.role,
+      code: req.body.code
     });
     user
       .save()
@@ -28,7 +29,7 @@ router.post("/signup", (req, res, next) => {
 router.post("/login", (req, res, next) => {
   let fetchedUser;
   User.findOne({ email: req.body.email })
-    .populate({ path: "team", select: "_id name project", populate: { path: "project", select: "_id title" } })
+    .populate({ path: "team", select: "_id name project", populate: { path: "project", select: "_id title code" } })
     .then((user) => {
       if (!user) {
         return res.status(401).json({ message: "Authentication failed" });
@@ -46,12 +47,13 @@ router.post("/login", (req, res, next) => {
           firstName: fetchedUser.firstName,
           userId: fetchedUser._id,
           role: fetchedUser.role,
+          code: fetchedUser.code,
           projectId: fetchedUser.team?.project?._id,
         },
         "Super secret message only for development: Seals are like dogs but underwater dogs.",
         { expiresIn: "1h" }
       );
-      res.status(200).json({ token, expiresIn: 3600, user: fetchedUser });
+      res.status(200).json({ token, expiresIn: 86400, user: fetchedUser });
     })
     .catch((error) => {
       return res.status(401).json({ message: "Authentication failed", error });

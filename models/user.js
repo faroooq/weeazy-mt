@@ -7,6 +7,7 @@ const userSchema = mongoose.Schema({
   lastName: { type: String, required: true },
   password: { type: String, required: true },
   role: { type: String, default: "" },
+  code: { type: String, default: "" },
   team: { type: mongoose.Schema.Types.ObjectId, ref: "Team" },
 });
 
