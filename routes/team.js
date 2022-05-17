@@ -31,6 +31,7 @@ router.get("/", (req, res, next) => {
     })
     .then((results) => {
       for (let team of teams) {
+        team.employees = team.employees.length;
         for (let result of results) {
           if (team._id.toString() === result._id.team.toString()) {
             if (result._id.status === "OPEN") team.openTickets = result.count;
