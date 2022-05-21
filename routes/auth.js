@@ -50,10 +50,10 @@ router.post("/login", (req, res, next) => {
           code: fetchedUser.code,
           projectId: fetchedUser.team?.project?._id,
         },
-        "Super secret message only for development: Seals are like dogs but underwater dogs.",
-        { expiresIn: "1h" }
+        "Super secret message only for development: Seals are like dogs but underwater dogs."
+        // { expiresIn: "1h" }
       );
-      res.status(200).json({ token, expiresIn: 86400, user: fetchedUser });
+      return res.status(200).json({ token, user: fetchedUser });
     })
     .catch((error) => {
       return res.status(401).json({ message: "Authentication failed", error });
