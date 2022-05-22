@@ -31,7 +31,12 @@ const storage = new GridFsStorage({
     });
   },
 });
-const upload = multer({ storage: storage });
+const upload = multer(
+  {
+    storage: storage,
+    limits: { fieldSize: 8 * 1024 * 1024 }
+  },
+);
 
 //ROUTES
 //all tickets
@@ -41,6 +46,8 @@ router.get("/", checkAuth, authorize("all"), (req, res, next) => {
     const number = req.query.number;
     let query = project && number ? { project, number } : project ? { project } : number ? { number } : {};
     Ticket.find(query)
+      // Selecting only few columns
+      .select("_id status priority type tags title createdOn number")
       .populate("raisedBy", "_id firstName lastName email")
       .populate("team", "_id name")
       .populate("assignedTo", "_id firstName lastName email")
