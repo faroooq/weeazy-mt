@@ -46,7 +46,7 @@ router.get("/", checkAuth, authorize("all"), (req, res, next) => {
     const number = req.query.number;
     let query = project && number ? { project, number } : project ? { project } : number ? { number } : {};
     Ticket.find(query)
-      // Selecting only few columns
+      // Selecting only few columns to avoid latency
       .select("_id status priority type tags title createdOn number")
       .populate("raisedBy", "_id firstName lastName email")
       .populate("team", "_id name")
@@ -109,7 +109,7 @@ router.post("/:id/comments", checkAuth, authorize("all"), (req, res, next) => {
     .then((comment) => {
       ticketHistory = new TicketHistory({
         changedBy: userId,
-        attribute: "newComment",
+        attribute: "Comment",
         newValue: comment.content,
       });
       return ticketHistory.save();

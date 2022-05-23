@@ -95,4 +95,18 @@ router.get("/:id/employees", checkAuth, authorize("admin", "suadmin", "member", 
     });
 });
 
+router.patch("/:id", checkAuth, authorize("admin", "suadmin"), async (req, res, next) => {
+  const id = req.params.id;
+  const updateQuery = req.body.updateQuery;
+  // if (req.userData.userId === id) {
+  if (updateQuery.password) updateQuery.password = await bcrypt.hash(updateQuery.password, 10);
+  Team.findByIdAndUpdate(id, { name: updateQuery.name }).then((updatedUser) => {
+    if (updatedUser) res.status(200).json(updatedUser);
+    else res.status(404).json({ message: "Team not found" });
+  });
+  // } else {
+  //   res.status(401).json({ message: "You are not authorized to edit this team." });
+  // }
+});
+
 module.exports = router;
