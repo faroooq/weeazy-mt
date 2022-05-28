@@ -7,7 +7,7 @@ const checkAuth = require("../middleware/check-auth");
 const authorize = require("../middleware/authorization");
 const bcrypt = require("bcrypt");
 
-router.get("/", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
+router.get("/", checkAuth, authorize("all"), (req, res, next) => {
   const searchQuery = req.query.searchQuery;
   const excludedIds = req.query.excludedIds;
   const unassigned = req.query.unassigned;
@@ -46,7 +46,7 @@ router.get("/", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
     });
 });
 
-router.patch("/", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
+router.patch("/", checkAuth, authorize("all"), (req, res, next) => {
   const employees = [];
   const updateQuery = req.body.update;
   const oldTeamsToUpdate = {};
@@ -80,7 +80,7 @@ router.patch("/", checkAuth, authorize("admin", "suadmin"), (req, res, next) => 
     });
 });
 
-router.patch("/:id", checkAuth, async (req, res, next) => {
+router.patch("/:id", checkAuth, authorize("all"), async (req, res, next) => {
   const id = req.params.id;
   const updateQuery = req.body.updateQuery;
   if (req.userData.userId === id) {

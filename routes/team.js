@@ -9,8 +9,7 @@ const async = require("async");
 const express = require("express");
 const router = express.Router();
 
-// router.get("/", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
-router.get("/", (req, res, next) => {
+router.get("/", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
   const projectId = req.query.projectId;
   let query = projectId ? { project: projectId } : {};
   let teams;
@@ -82,7 +81,7 @@ router.delete("/:id", checkAuth, authorize("admin", "suadmin"), (req, res, next)
     });
 });
 
-router.get("/:id/employees", checkAuth, authorize("admin", "suadmin", "member", "all"), (req, res, next) => {
+router.get("/:id/employees", checkAuth, authorize("all"), (req, res, next) => {
   const teamId = req.params.id;
   Employee.find({ team: teamId }, "_id firstName lastName email")
     .then((employees) => {
