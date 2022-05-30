@@ -9,7 +9,7 @@ const async = require("async");
 const express = require("express");
 const router = express.Router();
 
-router.get("/", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
+router.get("/", checkAuth, authorize("admin", "suadmin", "member"), (req, res, next) => {
   const projectId = req.query.projectId;
   let query = projectId ? { project: projectId } : {};
   let teams;
