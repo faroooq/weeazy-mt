@@ -46,8 +46,9 @@ router.get("/", checkAuth, authorize("all"), (req, res, next) => {
     const number = req.query.number;
     let query = project && number ? { project, number } : project ? { project } : number ? { number } : {};
     Ticket.find(query)
+      .sort({ createdOn: 'desc' })
       // Selecting only few columns to avoid latency
-      .select("_id status priority type tags title createdOn number")
+      .select("_id status priority type tags title createdOn number photo")
       .populate("raisedBy", "_id firstName lastName email")
       .populate("team", "_id name")
       .populate("assignedTo", "_id firstName lastName email")
@@ -68,10 +69,10 @@ router.get("/:id", checkAuth, authorize("all"), (req, res, next) => {
   const id = req.params.id;
   let ticket = {};
   Ticket.findOne({ number: id })
-    .populate("raisedBy", "_id firstName lastName email")
+    .populate("raisedBy", "_id firstName lastName email  photo")
     .populate({ path: "comments", populate: { path: "author", select: "firstName lastName email _id createdOn" } })
     .populate("team", "_id name")
-    .populate("assignedTo", "_id firstName lastName email")
+    .populate("assignedTo", "_id firstName lastName email  photo")
     .populate({ path: "history", populate: { path: "changedBy", select: " firstName lastName" } })
     .then((foundTicket) => {
       if (foundTicket) {
@@ -166,6 +167,7 @@ router.post("/", upload.array("files"), checkAuth, authorize("all"), (req, res) 
     assignedTo: req.body.assignedTo,
     type: req.body.type,
     tags: req.body.tags,
+    photo: req.body.photo,
     priority: req.body.priority,
   });
 
@@ -204,6 +206,19 @@ router.patch("/:id", checkAuth, authorize("all"), (req, res, next) => {
     })
     .then((updatedTicket) => {
       if (updatedTicket) res.status(201).json({ message: "Ticket updated successfully." });
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({ error });
+    });
+});
+
+// delete ticket
+router.delete("/:id", checkAuth, authorize("admin", "suadmin", "member"), (req, res, next) => {
+  const id = req.params.id;
+  Ticket.findByIdAndDelete(id)
+    .then((respose) => {
+      res.status(200).json({ message: "Ticket deleted successfully." });
     })
     .catch((error) => {
       console.log(error);
