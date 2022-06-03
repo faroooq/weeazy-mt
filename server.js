@@ -17,10 +17,10 @@ const teamRoutes = require("./routes/team");
 
 const app = express();
 
-app.set('port', (process.env.PORT || 3000));
+app.set('port', (process.env.PORT || 4000));
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://www.weeazy.org");
+  res.setHeader("Access-Control-Allow-Origin", "https://open.weeazy.org");
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE");
   res.setHeader('Access-Control-Allow-Credentials', true);
@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 
 let corsOptions = {
   // origin: "*"
-  origin: ['https://www.weeazy.org', process.env.WEEAZY_UI_REMOTE_URL]
+  origin: ['https://open.weeazy.org', process.env.WEEAZY_UI_REMOTE_URL]
 };
 app.use(cors(corsOptions));
 
