@@ -9,6 +9,7 @@ const compression = require('compression');
 const cors = require("cors");
 //Routes import
 const authRoutes = require("./routes/auth");
+const contactRoutes = require("./routes/contact");
 const ticketRoutes = require("./routes/ticket");
 const userRoutes = require("./routes/user");
 const projectRoutes = require("./routes/project");
@@ -57,6 +58,7 @@ app.use("/api/tickets", ticketRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/teams", teamRoutes);
+app.use("/api/contact", contactRoutes);
 
 // simple route
 app.get("/", (req, res) => {
