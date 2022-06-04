@@ -42,19 +42,32 @@ const upload = multer(
 //all tickets
 router.get("/", checkAuth, authorize("all"), (req, res, next) => {
   const project = req.query.project;
+  const ticketOwned = req.query.ticketOwned;
+  const role = req.query.role;
   if (project) {
     const number = req.query.number;
     let query = project && number ? { project, number } : project ? { project } : number ? { number } : {};
+    let ticketsOwnedArray = []
     Ticket.find(query)
       .sort({ updatedOn: 'desc' })
       // Selecting only few columns to avoid latency
       .select("_id status priority type tags title createdOn updatedOn number photo")
-      .populate("raisedBy", "_id firstName lastName email")
+      .populate("raisedBy", "_id firstName lastName email role")
       .populate("team", "_id name")
-      .populate("assignedTo", "_id firstName lastName email")
+      .populate("assignedTo", "_id firstName lastName email role")
       .then((tickets) => {
         if (tickets) {
-          res.status(200).json(tickets);
+          for (let ticket of tickets) {
+            // Displaying tickets only to the raisedBy or assignedTo member or if admin.
+            // This condition will restrict to see other team members tickets.
+            if (
+              ticket.assignedTo.email.toString() === ticketOwned.toString() ||
+              ticket.raisedBy.email.toString() === ticketOwned.toString() ||
+              role === "admin") {
+              ticketsOwnedArray.push(ticket);
+            }
+          }
+          res.status(200).json(ticketsOwnedArray);
         } else {
           res.status(404).json({ message: "Tickets not found." });
         }
@@ -67,17 +80,24 @@ router.get("/", checkAuth, authorize("all"), (req, res, next) => {
 //ticket by id
 router.get("/:id", checkAuth, authorize("all"), (req, res, next) => {
   const id = req.params.id;
+  const ticketOwned = req.query.ticketOwned;
+  const role = req.query.role;
   let ticket = {};
   Ticket.findOne({ number: id })
-    .populate("raisedBy", "_id firstName lastName email  photo")
+    .populate("raisedBy", "_id firstName lastName email  photo role")
     .populate({ path: "comments", populate: { path: "author", select: "firstName lastName email _id createdOn updatedOn" } })
     .populate("team", "_id name")
-    .populate("assignedTo", "_id firstName lastName email  photo")
+    .populate("assignedTo", "_id firstName lastName email  photo role")
     .populate({ path: "history", populate: { path: "changedBy", select: " firstName lastName" } })
     .then((foundTicket) => {
       if (foundTicket) {
-        ticket = foundTicket;
-        return gfs.find({ _id: { $in: ticket.files } }).toArray();
+        if (
+          foundTicket.assignedTo.email.toString() === ticketOwned.toString() ||
+          foundTicket.raisedBy.email.toString() === ticketOwned.toString() ||
+          role === "admin") {
+          ticket = foundTicket;
+          return gfs.find({ _id: { $in: ticket.files } }).toArray();
+        }
       } else {
         throw new Error("Ticket not found.");
       }
@@ -86,8 +106,10 @@ router.get("/:id", checkAuth, authorize("all"), (req, res, next) => {
       if (files) {
         ticket = ticket.toObject();
         ticket.files = files;
+        res.status(200).json(ticket);
+      } else {
+        throw new Error("Ticket not found.");
       }
-      res.status(200).json(ticket);
     })
     .catch((error) => {
       console.log(error);
@@ -183,7 +205,7 @@ router.post("/", upload.array("files"), checkAuth, authorize("all"), (req, res) 
 });
 
 //update ticket
-router.patch("/:id", upload.array("files"), checkAuth, authorize("all"), (req, res, next) => {
+router.patch("/:id", upload.array("files"), checkAuth, authorize("admin", "suadmin", "member"), (req, res, next) => {
   const id = req.params.id;
   const uderId = req.userData.userId;
   const changes = req.body.changes;
