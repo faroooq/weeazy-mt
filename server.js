@@ -45,10 +45,10 @@ mongoose
 app.use(compression());
 
 // parse requests of content-type - application/json
-app.use(express.json());  /* bodyParser.json() is deprecated */
+app.use(express.json({ limit: '50mb' }));  /* bodyParser.json() is deprecated */
 
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true }));   /* bodyParser.urlencoded() is deprecated */
+app.use(express.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));   /* bodyParser.urlencoded() is deprecated */
 
 app.use(cookieParser());
 

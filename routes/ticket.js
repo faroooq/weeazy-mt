@@ -46,9 +46,9 @@ router.get("/", checkAuth, authorize("all"), (req, res, next) => {
     const number = req.query.number;
     let query = project && number ? { project, number } : project ? { project } : number ? { number } : {};
     Ticket.find(query)
-      .sort({ createdOn: 'desc' })
+      .sort({ updatedOn: 'desc' })
       // Selecting only few columns to avoid latency
-      .select("_id status priority type tags title createdOn number photo")
+      .select("_id status priority type tags title createdOn updatedOn number photo")
       .populate("raisedBy", "_id firstName lastName email")
       .populate("team", "_id name")
       .populate("assignedTo", "_id firstName lastName email")
@@ -70,7 +70,7 @@ router.get("/:id", checkAuth, authorize("all"), (req, res, next) => {
   let ticket = {};
   Ticket.findOne({ number: id })
     .populate("raisedBy", "_id firstName lastName email  photo")
-    .populate({ path: "comments", populate: { path: "author", select: "firstName lastName email _id createdOn" } })
+    .populate({ path: "comments", populate: { path: "author", select: "firstName lastName email _id createdOn updatedOn" } })
     .populate("team", "_id name")
     .populate("assignedTo", "_id firstName lastName email  photo")
     .populate({ path: "history", populate: { path: "changedBy", select: " firstName lastName" } })
@@ -183,7 +183,7 @@ router.post("/", upload.array("files"), checkAuth, authorize("all"), (req, res) 
 });
 
 //update ticket
-router.patch("/:id", checkAuth, authorize("all"), (req, res, next) => {
+router.patch("/:id", upload.array("files"), checkAuth, authorize("all"), (req, res, next) => {
   const id = req.params.id;
   const uderId = req.userData.userId;
   const changes = req.body.changes;
