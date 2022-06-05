@@ -28,8 +28,8 @@ app.use((req, res, next) => {
 });
 
 let corsOptions = {
-  origin: "*"
-  // origin: ['https://open.weeazy.org', process.env.WEEAZY_UI_REMOTE_URL]
+  // origin: "*"
+  origin: ['https://open.weeazy.org', process.env.WEEAZY_UI_REMOTE_URL]
 };
 app.use(cors(corsOptions));
 
