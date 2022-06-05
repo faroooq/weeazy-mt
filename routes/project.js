@@ -9,6 +9,7 @@ const Ticket = require("../models/ticket");
 const Employee = require("../models/user");
 const async = require("async");
 
+// Find Single Project
 router.get("/:id", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
   const id = req.params.id;
   let project = {};
@@ -27,6 +28,7 @@ router.get("/:id", checkAuth, authorize("admin", "suadmin"), (req, res, next) =>
     });
 });
 
+// Find employees by project
 router.get("/:id/employees", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
   const id = req.params.id;
   Team.find({ project: id })
@@ -37,6 +39,7 @@ router.get("/:id/employees", checkAuth, authorize("admin", "suadmin"), (req, res
     });
 });
 
+// Find all projects
 router.get("/", checkAuth, authorize("suadmin"), (req, res, next) => {
   Project.find().then((projects) => {
     if (projects) {
@@ -47,6 +50,7 @@ router.get("/", checkAuth, authorize("suadmin"), (req, res, next) => {
   });
 });
 
+// Find Tickets by Project
 router.get("/:id/statistics", checkAuth, authorize("suadmin", "admin", "member"), (req, res, next) => {
   const id = req.params.id;
   Ticket.aggregate([
@@ -101,6 +105,149 @@ router.get("/:id/statistics", checkAuth, authorize("suadmin", "admin", "member")
         ],
         categorizedByDateClosed: [
           { $match: { project: mongoose.Types.ObjectId(id), status: "CLOSED" } },
+          {
+            $group: {
+              _id: { day: { $dayOfMonth: "$createdOn" }, month: { $month: "$createdOn" } },
+              count: { $sum: 1 },
+            },
+          },
+          { $sort: { "_id.month": 1 } },
+        ],
+      },
+    },
+  ])
+    .then((statistics) => {
+      return Team.populate(statistics, { path: "categorizedByTeam._id", select: "name" });
+    })
+    .then((statistics) => {
+      if (statistics) res.status(201).json(statistics[0]);
+      else res.status(404).json({ message: "Unable to obtain statistics" });
+    })
+    .catch((err) => res.status(500).json(err));
+});
+
+// Find Tickets by Member
+router.get("/:id/:memberId/statistics", checkAuth, authorize("suadmin", "admin", "member"), (req, res, next) => {
+  const id = req.params.id;
+  const memberId = req.params.memberId;
+  Ticket.aggregate([
+    {
+      $facet: {
+        categorizedByStatus: [
+          {
+            $match: {
+              $or: [
+                {
+                  raisedBy: mongoose.Types.ObjectId(memberId)
+                },
+                {
+                  assignedTo: mongoose.Types.ObjectId(memberId)
+                }
+              ]
+            }
+          },
+          {
+            $group: {
+              _id: "$status",
+              count: { $sum: 1 },
+            },
+          },
+        ],
+        categorizedByType: [
+          {
+            $match: {
+              $or: [
+                {
+                  raisedBy: mongoose.Types.ObjectId(memberId)
+                },
+                {
+                  assignedTo: mongoose.Types.ObjectId(memberId)
+                }
+              ]
+            }
+          },
+          {
+            $group: {
+              _id: "$type",
+              count: { $sum: 1 },
+            },
+          },
+        ],
+        categorizedByPriority: [
+          {
+            $match: {
+              $or: [
+                {
+                  raisedBy: mongoose.Types.ObjectId(memberId)
+                },
+                {
+                  assignedTo: mongoose.Types.ObjectId(memberId)
+                }
+              ]
+            }
+          },
+          {
+            $group: {
+              _id: "$priority",
+              count: { $sum: 1 },
+            },
+          },
+        ],
+        categorizedByTeam: [
+          {
+            $match: {
+              $or: [
+                {
+                  raisedBy: mongoose.Types.ObjectId(memberId)
+                },
+                {
+                  assignedTo: mongoose.Types.ObjectId(memberId)
+                }
+              ]
+            }
+          },
+          {
+            $group: {
+              _id: "$team",
+              count: { $sum: 1 },
+            },
+          },
+        ],
+        categorizedByDateOpen: [
+          {
+            $match: {
+              $or: [
+                {
+                  raisedBy: mongoose.Types.ObjectId(memberId)
+                },
+                {
+                  assignedTo: mongoose.Types.ObjectId(memberId)
+                }
+              ], status: "OPEN"
+            }
+          },
+          {
+            $group: {
+              _id: { day: { $dayOfMonth: "$createdOn" }, assignedTo: mongoose.Types.ObjectId(memberId), month: { $month: "$createdOn" } },
+              count: { $sum: 1 },
+            },
+          },
+
+          { $sort: { "_id.month": 1, "_id.day": 1 } },
+        ],
+        categorizedByDateClosed: [
+          {
+            $match: {
+              $or: [
+                {
+                  raisedBy: mongoose.Types.ObjectId(memberId)
+                },
+                {
+                  assignedTo: mongoose.Types.ObjectId(memberId)
+                }
+              ], status: "CLOSED"
+            }
+          },
           {
             $group: {
               _id: { day: { $dayOfMonth: "$createdOn" }, month: { $month: "$createdOn" } },
@@ -190,6 +337,7 @@ router.post("/", checkAuth, authorize("suadmin", "admin"), (req, res, next) => {
     });
 });
 
+// Delete Project
 router.delete("/:id", checkAuth, authorize("suadmin", "admin"), (req, res, next) => {
   const id = req.params.id;
   let project;

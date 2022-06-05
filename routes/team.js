@@ -33,7 +33,10 @@ router.get("/", checkAuth, authorize("admin", "suadmin", "member"), (req, res, n
         team.employees = team.employees.length;
         for (let result of results) {
           if (team._id.toString() === result._id.team.toString()) {
-            if (result._id.status === "OPEN") team.openTickets = result.count;
+            if (result._id.status === "OPEN"
+              || result._id.status === "PENDING"
+              || result._id.status === "RESOLVED")
+              team.openTickets = result.count;
             if (result._id.status === "CLOSED") team.closedTickets = result.count;
           }
         }
