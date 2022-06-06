@@ -44,9 +44,13 @@ router.get("/", checkAuth, authorize("all"), (req, res, next) => {
   const project = req.query.project;
   const ticketOwned = req.query.ticketOwned;
   const role = req.query.role;
+  const status = req.query.status;
   if (project) {
     const number = req.query.number;
-    let query = project && number ? { project, number } : project ? { project } : number ? { number } : {};
+    let query = {};
+    query = project && number ? { project, number } : project ? { project } : number ? { number } : {};
+    // Pulling tickets by status.
+    query["status"] = status;
     let ticketsOwnedArray = []
     Ticket.find(query)
       .sort({ updatedOn: 'desc' })
