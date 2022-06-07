@@ -45,6 +45,8 @@ router.get("/", checkAuth, authorize("all"), (req, res, next) => {
   const ticketOwned = req.query.ticketOwned;
   const role = req.query.role;
   const status = req.query.status;
+  const priority = req.query.priority;
+  const type = req.query.type;
   if (project) {
     const number = req.query.number;
     let query = {};
@@ -52,6 +54,12 @@ router.get("/", checkAuth, authorize("all"), (req, res, next) => {
     // Pulling tickets by status.
     if (status) {
       query["status"] = status;
+    }
+    if (priority) {
+      query["priority"] = priority;
+    }
+    if (type) {
+      query["type"] = type;
     }
     let ticketsOwnedArray = []
     Ticket.find(query)
