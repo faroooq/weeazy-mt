@@ -31,6 +31,9 @@ router.get("/", checkAuth, authorize("all"), (req, res, next) => {
     };
     limit = 0;
   }
+  // If we miss employees unfortunately from the members rows in UI, 
+  // that means the employees are disconnected from teams.
+  // Res: Comment this below if condition and assign to team and un-comment.
   if (unassigned === "true") {
     query["team"] = null;
   }

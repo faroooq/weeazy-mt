@@ -19,7 +19,7 @@ Note: No need to start mongodb database. once you restart the instance it will a
 sudo service mongod restart
 # Restart appache
 sudo /opt/bitnami/ctlscript.sh restart apache
-
+ 
 # Root
 cd /home/bitnami/stackmi/stackmi-midtier
 

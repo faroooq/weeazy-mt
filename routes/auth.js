@@ -42,6 +42,7 @@ router.post("/login", (req, res, next) => {
       if (!result) {
         return res.status(401).json({ message: "Authentication failed" });
       }
+      // TODO: ISSUE: Cannot set headers after they are sent to the client
       const token = jwt.sign(
         {
           email: fetchedUser.email,

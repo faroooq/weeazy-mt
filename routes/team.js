@@ -11,6 +11,10 @@ const router = express.Router();
 
 router.get("/", checkAuth, authorize("admin", "suadmin", "member"), (req, res, next) => {
   const projectId = req.query.projectId;
+  if (projectId === undefined) {
+    res.status(500).json({ message: "You are not assigned to any organization. Please contact your admin." });
+    return;
+  }
   let query = projectId ? { project: projectId } : {};
   let teams;
   Team.find(query)

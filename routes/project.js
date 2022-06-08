@@ -9,6 +9,22 @@ const Ticket = require("../models/ticket");
 const Employee = require("../models/user");
 const async = require("async");
 
+// Find Single Project for new signup
+router.get("/:id/find", (req, res, next) => {
+  const id = req.params.id;
+  let project = {};
+  Project.findOne({ code: id })
+    .then((foundProject) => {
+      if (foundProject) {
+        project = foundProject;
+        res.status(200).json(true);
+      } else {
+        res.status(201).json(false);
+      }
+    })
+  // .catch((err) => res.status(404).json(false));
+});
+
 // Find Single Project
 router.get("/:id", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
   const id = req.params.id;
