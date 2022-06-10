@@ -61,7 +61,7 @@ router.get("/", checkAuth, authorize("all"), (req, res, next) => {
     if (type) {
       query["type"] = type;
     }
-    let ticketsOwnedArray = []
+    let totalTickets = []
     Ticket.find(query)
       .sort({ updatedOn: 'desc' })
       // Selecting only few columns to avoid latency
@@ -71,17 +71,36 @@ router.get("/", checkAuth, authorize("all"), (req, res, next) => {
       .populate("assignedTo", "_id firstName lastName email role")
       .then((tickets) => {
         if (tickets) {
-          for (let ticket of tickets) {
+          let openTicketCount = 0;
+          let pendingTicketCount = 0;
+          let resolvedTicketCount = 0;
+          let closedTicketCount = 0;
+          for (let i = 0; i < tickets.length; i++) {
             // Displaying tickets only to the raisedBy or assignedTo member or if admin.
             // This condition will restrict to see other team members tickets.
             if (
-              ticket.assignedTo.email.toString() === ticketOwned.toString() ||
-              ticket.raisedBy.email.toString() === ticketOwned.toString() ||
+              tickets[i].assignedTo.email.toString() === ticketOwned.toString() ||
+              tickets[i].raisedBy.email.toString() === ticketOwned.toString() ||
               role === "admin") {
-              ticketsOwnedArray.push(ticket);
+              totalTickets.push(tickets[i]);
+            }
+            if (tickets[i].status === 'OPEN') {
+              openTicketCount++;
+            } else if (tickets[i].status === 'PENDING') {
+              pendingTicketCount++;
+            } else if (tickets[i].status === 'RESOLVED') {
+              resolvedTicketCount++;
+            } else if (tickets[i].status === 'CLOSED') {
+              closedTicketCount++;
             }
           }
-          res.status(200).json(ticketsOwnedArray);
+          res.status(200).json(
+            {
+              'openTicketCount': openTicketCount, 'pendingTicketCount': pendingTicketCount,
+              'resolvedTicketCount': resolvedTicketCount, 'closedTicketCount': closedTicketCount,
+              totalTickets
+            }
+          );
         } else {
           res.status(404).json({ message: "Tickets not found." });
         }
