@@ -47,6 +47,8 @@ router.get("/", checkAuth, authorize("all"), (req, res, next) => {
   const status = req.query.status;
   const priority = req.query.priority;
   const type = req.query.type;
+  const startDate = req.query.startDate;
+  const endDate = req.query.endDate;
   if (project) {
     const number = req.query.number;
     let query = {};
@@ -60,6 +62,12 @@ router.get("/", checkAuth, authorize("all"), (req, res, next) => {
     }
     if (type) {
       query["type"] = type;
+    }
+    if (startDate !== 'Invalid Date' && endDate !== 'Invalid Date') {
+      query["createdOn"] = {
+        $gte: new Date(startDate),
+        $lt: new Date(endDate)
+      };
     }
     let totalTickets = []
     Ticket.find(query)
