@@ -7,7 +7,7 @@ const ticketSchema = mongoose.Schema({
   description: { type: String, required: true },
   photo: { type: String },
   files: [{ type: mongoose.Schema.Types.ObjectId, ref: "Uploads" }],
-  assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: false },
+  assignedTo: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", required: false }],
   team: { type: mongoose.Schema.Types.ObjectId, ref: "Team", required: false },
   raisedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   createdOn: { type: Date, default: Date.now },

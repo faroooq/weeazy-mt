@@ -84,22 +84,25 @@ router.get("/", checkAuth, authorize("all"), (req, res, next) => {
           let resolvedTicketCount = 0;
           let closedTicketCount = 0;
           for (let i = 0; i < tickets.length; i++) {
-            // Displaying tickets only to the raisedBy or assignedTo member or if admin.
-            // This condition will restrict to see other team members tickets.
-            if (
-              tickets[i].assignedTo.email.toString() === ticketOwned.toString() ||
-              tickets[i].raisedBy.email.toString() === ticketOwned.toString() ||
-              role === "admin") {
-              totalTickets.push(tickets[i]);
-            }
-            if (tickets[i].status === 'OPEN') {
-              openTicketCount++;
-            } else if (tickets[i].status === 'PENDING') {
-              pendingTicketCount++;
-            } else if (tickets[i].status === 'RESOLVED') {
-              resolvedTicketCount++;
-            } else if (tickets[i].status === 'CLOSED') {
-              closedTicketCount++;
+            for (let j = 0; j < tickets[i].assignedTo.length; j++) {
+              // Displaying tickets only to the raisedBy or assignedTo member or if admin.
+              // This condition will restrict to see other team members tickets.
+              if (
+                tickets[i].assignedTo[j].email.toString() === ticketOwned.toString() ||
+                tickets[i].raisedBy.email.toString() === ticketOwned.toString() ||
+                role === "admin") {
+                totalTickets.push(tickets[i]);
+                if (tickets[i].status === 'OPEN') {
+                  openTicketCount++;
+                } else if (tickets[i].status === 'PENDING') {
+                  pendingTicketCount++;
+                } else if (tickets[i].status === 'RESOLVED') {
+                  resolvedTicketCount++;
+                } else if (tickets[i].status === 'CLOSED') {
+                  closedTicketCount++;
+                }
+                break;
+              }
             }
           }
           res.status(200).json(
@@ -132,12 +135,14 @@ router.get("/:id", checkAuth, authorize("all"), (req, res, next) => {
     .populate({ path: "history", populate: { path: "changedBy", select: " firstName lastName" } })
     .then((foundTicket) => {
       if (foundTicket) {
-        if (
-          foundTicket.assignedTo.email.toString() === ticketOwned.toString() ||
-          foundTicket.raisedBy.email.toString() === ticketOwned.toString() ||
-          role === "admin") {
-          ticket = foundTicket;
-          return gfs.find({ _id: { $in: ticket.files } }).toArray();
+        for (let i = 0; i < foundTicket.assignedTo.length; i++) {
+          if (
+            foundTicket.assignedTo[i].email.toString() === ticketOwned.toString() ||
+            foundTicket.raisedBy.email.toString() === ticketOwned.toString() ||
+            role === "admin") {
+            ticket = foundTicket;
+            return gfs.find({ _id: { $in: ticket.files } }).toArray();
+          }
         }
       } else {
         throw new Error("Ticket not found.");
@@ -227,13 +232,12 @@ router.post("/", upload.array("files"), checkAuth, authorize("all"), (req, res) 
     raisedBy: req.userData.userId,
     project: req.body.project,
     team: req.body.team,
-    assignedTo: req.body.assignedTo,
+    assignedTo: req.body.assignedTo.split(","),
     type: req.body.type,
     tags: req.body.tags,
     photo: req.body.photo,
     priority: req.body.priority,
   });
-
   ticket
     .save()
     .then((ticket) => {
