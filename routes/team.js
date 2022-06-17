@@ -89,8 +89,13 @@ router.delete("/:id", checkAuth, authorize("admin", "suadmin"), (req, res, next)
 });
 
 router.get("/:id/employees", checkAuth, authorize("all"), (req, res, next) => {
+  let query = {};
   const teamId = req.params.id;
-  Employee.find({ team: teamId }, "_id firstName lastName email")
+  if (teamId && teamId !== 'allemptodos') {
+    query["team"] = teamId;
+  }
+  Employee.find(query, "_id firstName lastName email")
+    .populate("team", "_id name")
     .then((employees) => {
       if (employees) {
         res.status(201).json(employees);

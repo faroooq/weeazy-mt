@@ -11,6 +11,7 @@ const cors = require("cors");
 const authRoutes = require("./routes/auth");
 const contactRoutes = require("./routes/contact");
 const ticketRoutes = require("./routes/ticket");
+const todoRoutes = require("./routes/todo");
 const userRoutes = require("./routes/user");
 const projectRoutes = require("./routes/project");
 const teamRoutes = require("./routes/team");
@@ -55,6 +56,7 @@ app.use(cookieParser());
 //Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/tickets", ticketRoutes);
+app.use("/api/todos", todoRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/teams", teamRoutes);
