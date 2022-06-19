@@ -13,6 +13,8 @@ const todoSchema = mongoose.Schema({
   status: { type: String, default: "OPEN" },
   priority: { type: String, default: "LOW" },
   type: { type: String, default: "TODO" },
+  position: { type: String, required: false },
+  column: { type: String, required: false },
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment", required: false }],
   history: [{ type: mongoose.Schema.Types.ObjectId, ref: "TodoHistory", required: false }],
 });
