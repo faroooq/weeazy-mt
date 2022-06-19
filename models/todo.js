@@ -15,6 +15,7 @@ const todoSchema = mongoose.Schema({
   type: { type: String, default: "TODO" },
   position: { type: String, required: false },
   column: { type: String, required: false },
+  enableEdit: { type: String, required: false },
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment", required: false }],
   history: [{ type: mongoose.Schema.Types.ObjectId, ref: "TodoHistory", required: false }],
 });

@@ -68,7 +68,7 @@ router.get("/", checkAuth, authorize("all"), (req, res, next) => {
     Todo.find(query)
       // .sort({ priority: 'asc' })
       // Selecting only few columns to avoid latency
-      .select("_id status priority type description createdOn updatedOn noteId photo position")
+      .select("_id status priority type description createdOn updatedOn noteId photo position enableEdit")
       .populate("raisedBy", "_id firstName lastName email role")
       .populate("team", "_id name")
       .populate("assignedTo", "_id firstName lastName email role")
@@ -128,12 +128,13 @@ router.post("/", upload.array("files"), checkAuth, authorize("all"), (req, res) 
     raisedBy: req.userData.userId,
     project: req.body.project,
     team: req.body.team,
-    assignedTo: req.body.assignedTo.split(","),
+    assignedTo: req.body.assignedTo,
     type: req.body.type,
     photo: req.body.photo,
     priority: req.body.priority,
     position: req.body.position,
     column: req.body.column,
+    enableEdit: req.body.enableEdit
   });
   todo
     .save()
@@ -151,24 +152,26 @@ router.patch("/:id", checkAuth, authorize("admin", "suadmin", "member"), (req, r
   const id = req.params.id;
   const userId = req.userData.userId;
   const changes = req.body.changes;
-  const todoHistory = [];
+  // WE WILL ENBALE HISTORY UPON CLIENT REQUIREMENT
+  // const todoHistory = [];
   const updateQuery = {};
-  console.log(changes)
   for (let change of changes) {
     updateQuery[change.attribute] = change.attribute === "assignedTo" || change.attribute === "team" ? change.id : change.newValue;
-    todoHistory.push(new TodoHistory({ changedBy: userId, attribute: change.attribute, oldValue: change.oldValue, newValue: change.newValue }));
+    // WE WILL ENBALE HISTORY UPON CLIENT REQUIREMENT
+    // todoHistory.push(new TodoHistory({ changedBy: userId, attribute: change.attribute, oldValue: change.oldValue, newValue: change.newValue }));
   }
   Todo.findOneAndUpdate({ noteId: id }, updateQuery)
-    .then((updatedTodo) => {
-      if (updatedTodo) {
-        return TodoHistory.insertMany(todoHistory);
-      } else {
-        res.status(404).json({ message: "Todo with this id cannot be found." });
-      }
-    })
-    .then((todoHistory) => {
-      if (todoHistory) return Todo.findOneAndUpdate({ noteId: id }, { $push: { history: todoHistory } });
-    })
+    // WE WILL ENBALE HISTORY UPON CLIENT REQUIREMENT  
+    // .then((updatedTodo) => {
+    //   if (updatedTodo) {
+    //     return TodoHistory.insertMany(todoHistory);
+    //   } else {
+    //     res.status(404).json({ message: "Todo with this id cannot be found." });
+    //   }
+    // })
+    // .then((todoHistory) => {
+    //   if (todoHistory) return Todo.findOneAndUpdate({ noteId: id }, { $push: { history: todoHistory } });
+    // })
     .then((updatedTodo) => {
       if (updatedTodo) res.status(201).json({ message: "Todo updated successfully." });
     })
