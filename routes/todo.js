@@ -71,7 +71,7 @@ router.get("/", checkAuth, authorize("all"), (req, res, next) => {
       .select("_id status priority type description createdOn updatedOn noteId photo position enableEdit")
       .populate("raisedBy", "_id firstName lastName email role")
       .populate("team", "_id name")
-      .populate("assignedTo", "_id firstName lastName email role")
+      .populate("assignedTo", "_id firstName lastName email role photo")
       .then((todos) => {
         if (todos) {
           let openTodoCount = 0;
