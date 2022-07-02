@@ -34,7 +34,7 @@ let corsOptions = {
 };
 app.use(cors(corsOptions));
 
-const dbURI = process.env.dbURI || "mongodb://localhost:27017/bug_tracker";
+const dbURI = process.env.dbURI || "mongodb://localhost:27017/weeazy_tracker";
 
 mongoose
   .connect(dbURI, { useUnifiedTopology: true, useCreateIndex: true, useNewUrlParser: true, useFindAndModify: false })

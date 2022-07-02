@@ -66,9 +66,9 @@ router.get("/", checkAuth, authorize("all"), (req, res, next) => {
     }
     let totalTodos = []
     Todo.find(query)
-      // .sort({ priority: 'asc' })
+      .sort({ priority_id: 'asc' })
       // Selecting only few columns to avoid latency
-      .select("_id status priority type description createdOn updatedOn noteId photo position enableEdit")
+      .select("_id status priority priority_id type description createdOn updatedOn noteId photo position enableEdit")
       .populate("raisedBy", "_id firstName lastName email role")
       .populate("team", "_id name")
       .populate("assignedTo", "_id firstName lastName email role photo")
@@ -132,6 +132,7 @@ router.post("/", upload.array("files"), checkAuth, authorize("all"), (req, res) 
     type: req.body.type,
     photo: req.body.photo,
     priority: req.body.priority,
+    priority_id: req.body.priority_id,
     position: req.body.position,
     column: req.body.column,
     enableEdit: req.body.enableEdit

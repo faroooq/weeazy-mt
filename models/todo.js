@@ -12,6 +12,7 @@ const todoSchema = mongoose.Schema({
   updatedOn: { type: Date, default: Date.now },
   status: { type: String, default: "OPEN" },
   priority: { type: String, default: "LOW" },
+  priority_id: { type: String, default: "LOW" },
   type: { type: String, default: "TODO" },
   position: { type: String, required: false },
   column: { type: String, required: false },
