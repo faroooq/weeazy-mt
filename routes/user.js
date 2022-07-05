@@ -7,7 +7,8 @@ const checkAuth = require("../middleware/check-auth");
 const authorize = require("../middleware/authorization");
 const bcrypt = require("bcrypt");
 
-router.get("/", checkAuth, authorize("all"), (req, res, next) => {
+// Get all Users
+router.get("/", checkAuth, authorize("suadmin", "admin"), (req, res, next) => {
   const searchQuery = req.query.searchQuery;
   const excludedIds = req.query.excludedIds;
   const unassigned = req.query.unassigned;
@@ -49,6 +50,7 @@ router.get("/", checkAuth, authorize("all"), (req, res, next) => {
     });
 });
 
+// Update Multiple User
 router.patch("/", checkAuth, authorize("all"), (req, res, next) => {
   const employees = [];
   const updateQuery = req.body.update;
@@ -83,6 +85,7 @@ router.patch("/", checkAuth, authorize("all"), (req, res, next) => {
     });
 });
 
+// Update User
 router.patch("/:id", checkAuth, authorize("all"), async (req, res, next) => {
   const id = req.params.id;
   const updateQuery = req.body.updateQuery;

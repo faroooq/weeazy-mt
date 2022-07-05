@@ -13,7 +13,8 @@ router.post("/signup", (req, res, next) => {
       password: hash,
       role: req.body.role,
       code: req.body.code,
-      photo: req.body.photo ? req.body.photo : ""
+      provider: req.body.provider,
+      photoUrl: req.body.photoUrl ? req.body.photoUrl : ""
     });
     user
       .save()

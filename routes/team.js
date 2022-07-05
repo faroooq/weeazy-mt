@@ -9,7 +9,8 @@ const async = require("async");
 const express = require("express");
 const router = express.Router();
 
-router.get("/", checkAuth, authorize("admin", "suadmin", "member"), (req, res, next) => {
+// get all teams
+router.get("/", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
   const projectId = req.query.projectId;
   if (projectId === undefined) {
     res.status(500).json({ message: "You are not assigned to any organization. Please contact your admin." });
@@ -53,6 +54,7 @@ router.get("/", checkAuth, authorize("admin", "suadmin", "member"), (req, res, n
     });
 });
 
+// create new team
 router.post("/", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
   const team = new Team({ name: req.body.teamName, project: req.body.projectId });
   team
@@ -68,6 +70,7 @@ router.post("/", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
     });
 });
 
+// delete team
 router.delete("/:id", checkAuth, authorize("admin", "suadmin"), (req, res, next) => {
   const id = req.params.id;
   let team;
@@ -88,6 +91,7 @@ router.delete("/:id", checkAuth, authorize("admin", "suadmin"), (req, res, next)
     });
 });
 
+// get employees by teamId
 router.get("/:id/employees", checkAuth, authorize("all"), (req, res, next) => {
   let query = {};
   const teamId = req.params.id;
@@ -106,6 +110,7 @@ router.get("/:id/employees", checkAuth, authorize("all"), (req, res, next) => {
     });
 });
 
+// update team
 router.patch("/:id", checkAuth, authorize("admin", "suadmin"), async (req, res, next) => {
   const id = req.params.id;
   const updateQuery = req.body.updateQuery;

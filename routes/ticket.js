@@ -73,7 +73,7 @@ router.get("/", checkAuth, authorize("all"), (req, res, next) => {
     Ticket.find(query)
       .sort({ updatedOn: 'desc' })
       // Selecting only few columns to avoid latency
-      .select("_id status priority type tags title createdOn updatedOn number photo")
+      .select("_id status priority type tags title createdOn updatedOn number photoUrl")
       .populate("raisedBy", "_id firstName lastName email role")
       .populate("team", "_id name")
       .populate("assignedTo", "_id firstName lastName email role")
@@ -128,10 +128,10 @@ router.get("/:id", checkAuth, authorize("all"), (req, res, next) => {
   const role = req.query.role;
   let ticket = {};
   Ticket.findOne({ number: id })
-    .populate("raisedBy", "_id firstName lastName email  photo role")
+    .populate("raisedBy", "_id firstName lastName email  photoUrl role")
     .populate({ path: "comments", populate: { path: "author", select: "firstName lastName email _id createdOn updatedOn" } })
     .populate("team", "_id name")
-    .populate("assignedTo", "_id firstName lastName email  photo role")
+    .populate("assignedTo", "_id firstName lastName email  photoUrl role")
     .populate({ path: "history", populate: { path: "changedBy", select: " firstName lastName" } })
     .then((foundTicket) => {
       if (foundTicket) {
@@ -235,7 +235,7 @@ router.post("/", upload.array("files"), checkAuth, authorize("all"), (req, res) 
     assignedTo: req.body.assignedTo.split(","),
     type: req.body.type,
     tags: req.body.tags,
-    photo: req.body.photo,
+    photoUrl: req.body.photoUrl,
     priority: req.body.priority,
   });
   ticket

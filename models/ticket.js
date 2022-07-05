@@ -5,7 +5,7 @@ const ticketSchema = mongoose.Schema({
   title: { type: String, required: true },
   project: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: false },
   description: { type: String, required: true },
-  photo: { type: String },
+  photoUrl: { type: String },
   files: [{ type: mongoose.Schema.Types.ObjectId, ref: "Uploads" }],
   assignedTo: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", required: false }],
   team: { type: mongoose.Schema.Types.ObjectId, ref: "Team", required: false },
