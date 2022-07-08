@@ -15,30 +15,33 @@ router.get("/", checkAuth, authorize("suadmin", "admin"), (req, res, next) => {
   const projectCode = req.query.projectCode;
   let query = {};
   let limit = 100;
+  // TODO: Below RegExp not working
   if (searchQuery) {
-    const regex = new RegExp(searchQuery);
-    const splittedSearchQuery = searchQuery.split(" ");
-    const firstPart = new RegExp(splittedSearchQuery[0]);
-    const secondPart = new RegExp(splittedSearchQuery[1]);
+    // const regex = new RegExp(searchQuery);
+    // const splittedSearchQuery = searchQuery.split(" ");
+    // const firstPart = new RegExp(splittedSearchQuery[0]);
+    // const secondPart = new RegExp(splittedSearchQuery[1]);
     query = {
       $or: [
-        { firstName: regex },
-        { lastName: regex },
-        { email: regex },
-        { firstName: firstPart, lastName: secondPart },
-        { firstName: secondPart, lastName: firstPart },
+        { firstName: searchQuery },
+        { lastName: searchQuery },
+        { email: searchQuery },
+        // { firstName: firstPart, lastName: secondPart },
+        // { firstName: secondPart, lastName: firstPart },
       ],
-      _id: { $ne: excludedIds },
+      // _id: { $ne: excludedIds },
     };
-    limit = 0;
+    // limit = 0;
   }
   // If we miss employees unfortunately from the members rows in UI, 
   // that means the employees are disconnected from teams.
   // Res: Comment this below if condition and assign to team and un-comment.
   if (unassigned === "true") {
-    query["team"] = null;
+    query["team"] = [];
   }
-  query["code"] = projectCode;
+  if (projectCode) {
+    query["code"] = projectCode;
+  }
   User.find(query, "_id firstName lastName email role code")
     .limit(limit)
     .then((employees) => {

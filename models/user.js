@@ -10,7 +10,7 @@ const userSchema = mongoose.Schema({
   role: { type: String, default: "" },
   code: { type: String, default: "" },
   provider: { type: String, default: "" },
-  team: { type: mongoose.Schema.Types.ObjectId, ref: "Team" },
+  team: [{ type: mongoose.Schema.Types.ObjectId, ref: "Team" }],
 });
 
 userSchema.plugin(uniqueValidator);
